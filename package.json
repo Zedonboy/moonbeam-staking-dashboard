@@ -7,7 +7,7 @@
     "build_polkadot": "yarn generate:defs && yarn generate:meta",
     "generate:defs": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package moonbeam/interfaces --input ./src/interfaces --endpoint ./metadata.json",
     "generate:meta": "ts-node --skip-project node_modules/.bin/polkadot-types-from-chain --package moonbeam/interfaces --endpoint ./metadata.json --output ./src/interfaces --strict",
-    "build": "tsc && vite build",
+    "build": "yarn build_polkadot && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
