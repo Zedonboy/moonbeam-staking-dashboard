@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "build_polkadot": "yarn generate:defs && yarn generate:meta",
+    "generate:defs": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package moonbeam/interfaces --input ./src/interfaces --endpoint ./metadata.json",
+    "generate:meta": "ts-node --skip-project node_modules/.bin/polkadot-types-from-chain --package moonbeam/interfaces --endpoint ./metadata.json --output ./src/interfaces --strict",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -12,13 +15,14 @@
     "@heroicons/react": "^1.0.6",
     "@polkadot/api": "^7.14.3",
     "@polkadot/extension-dapp": "^0.42.9",
-    "bn.js": "^5.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.2",
-    "recoil": "^0.6.1"
+    "recoil": "^0.6.1",
+    "ts-node": "^10.7.0"
   },
   "devDependencies": {
+    "@polkadot/typegen": "^7.14.3",
     "@tailwindcss/forms": "^0.5.0",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
