@@ -20,6 +20,7 @@ function classNames(...classes) {
 import { Route, Routes } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { web3AccountState } from "../atoms";
+import CollatorPage from "./Collator";
 const people = [
   { name: 'Moonbeam' },
   { name: 'Moonriver' },
@@ -279,6 +280,7 @@ export default function Home() {
                 {/* Replace with your content */}
                 <Routes>
                   <Route path="/" element={<Start />}></Route>
+                  <Route path="/collator/:address" element={<CollatorPage/>}/>
                 </Routes>
                 {/* /End replace */}
               </div>

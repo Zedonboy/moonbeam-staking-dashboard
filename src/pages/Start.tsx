@@ -5,14 +5,14 @@ import Button from "../components/Button";
 import ApiContext from "../context/PolkadotContext";
 import { formatBalance } from "@polkadot/util";
 import {
-    web3Accounts,
-    web3Enable,
-    web3FromSource,
-  } from "@polkadot/extension-dapp";
+  web3Accounts,
+  web3Enable,
+  web3FromSource,
+} from "@polkadot/extension-dapp";
 import { useRecoilState } from "recoil";
 import { web3AccountState } from "../atoms";
+import {Link} from 'react-router-dom'
 
-  
 export default function Start() {
   const [candidatePool, setCandidatePool] = useState([]);
   const [collatorAddress, setCollatorAddress] = useState("");
@@ -20,7 +20,7 @@ export default function Start() {
   const chainChooser = useContext(ChainContext);
   const [balance, setBalance] = useState(0);
   const api = useContext(ApiContext);
-  const [web3Account, setAccount] = useRecoilState(web3AccountState)
+  const [web3Account, setAccount] = useRecoilState(web3AccountState);
 
   useEffect(() => {
     const task = async () => {
@@ -39,11 +39,7 @@ export default function Start() {
       api?.query?.system?.account(
         web3Account.address,
         ({ data: { free: currentFree }, nonce: currentNonce }) => {
-          let account = formatBalance(
-            currentFree,
-            { withSi: false },
-            18
-          );
+          let account = formatBalance(currentFree, { withSi: false }, 18);
           setBalance(parseFloat(account));
         }
       );
@@ -76,7 +72,7 @@ export default function Start() {
             placeholder="Stake Amount"
           />
           <Button
-          disabled={!web3Account}
+            disabled={!web3Account}
             onClick={(e) => {
               let task = async () => {
                 let info = await api?.query?.parachainStaking?.candidateInfo(
@@ -118,7 +114,41 @@ export default function Start() {
 
         <div className="p-2">
           <h1 className="text-blue-100 text-3xl">Collators</h1>
-          {candidatePool?.map((v) => (
+          <table class="table-auto w-full">
+            <thead>
+              <tr className="text-blue-100">
+                <th>Collator address</th>
+                <th>Staked Amount</th>
+                {/* <th>Action</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {
+                candidatePool?.map(v => (
+                  <tr>
+                  <td className="text-blue-500">
+                    <Link to={`/collator/${v?.owner}`}>
+                    {v?.owner}</Link></td>
+                  <td className="text-green-500 text-xs">{(function () {
+                  let a = v.amount.replace(/\,/g, "");
+                  return formatBalance(
+                    a,
+                    {
+                      withSi: false,
+                    },
+                    18
+                  );
+                })()}</td>
+                  <td>
+                  <button className="text-blue-400 text-sm">Copy</button>
+                  </td>
+                </tr>
+                ))
+              }
+             
+            </tbody>
+          </table>
+          {/* {candidatePool?.map((v) => (
             <div className="flex justify-between">
               <div className="overflow-clip">
                 <a className="text-blue-500">{v?.owner}</a>
@@ -139,7 +169,7 @@ export default function Start() {
                 <button className="text-blue-400">Copy</button>
               </div>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
